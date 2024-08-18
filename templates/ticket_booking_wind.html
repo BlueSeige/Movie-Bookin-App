@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Tickets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .header {
+      text-align: center;
+      background-color: aqua;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .navbar {
+      background-color: #333;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-brand {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .navbar-brand:hover {
+      color: aqua;
+    }
+    .navbar-nav {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 10px;
+    }
+    .nav-item {
+      margin-right: 10px;
+    }
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+    .nav-link:hover {
+      background-color: aqua;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+    }
+    form h3, form p {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: calc(100% - 20px);
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background-color: aqua;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    input[type="submit"]:hover {
+      background-color: #007bff;
+    }
+    .flashes {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+    .flashes li {
+      background-color: #ffe6e6;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="{{ url_for('user_dashboard',user_id=userr.id) }}">ChillTV</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('user_profile',user_id=userr.id) }}">Orders</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('index')}}">Logout</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('display_venues',user_id=userr.id) }}">Cinemas</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <form action="{{ url_for('tickets_booked', user_id=user_id,show_id=show_id, venue_id=venue_id, date=D, time=T) }}" method="POST">
+      <h3>Show: <input type="text" name="show_name" value="{{ shows.name }}" readonly></h3>
+      <p>Venue: <input type="text" name="venue_name" value="{{ venues.name }}" readonly></p>
+      <p>Date: <input type="date" name="Date" value="{{ D }}" readonly></p>
+      <p>Time: <input type="text" name="Time" value="{{ T }}" readonly></p>
+      <p>Available Seats: <input type="number" name="available_seats" value="{{ shows.available_seats }}" readonly></p>
+
+      <label for="num_tickets">Number of Tickets:</label>
+      <input type="number" id="num_tickets" name="num_tickets" min="1" max="{{ shows.available_seats }}" required>
+      <input type="submit" value="Book Tickets">
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          <li>{{ messages[0] }}</li> {# get the first message from the list #}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+</body>
+</html>

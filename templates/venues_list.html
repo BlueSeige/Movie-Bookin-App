@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Venues List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+      .venue-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .venue-container h2 {
+        margin-top: 0;
+      }
+      .header {
+        text-align: center;
+        background-color: aqua;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .navbar {
+        background-color: black;
+        padding: 10px 20px; /* Added padding to navbar */
+      }
+      .navbar-nav input[type="text"],
+      .navbar-nav input[type="submit"] {
+        margin-right: 10px; /* Added margin between input fields */
+      }
+      .navbar-nav input[type="text"] {
+        padding: 6px 12px; /* Adjusted padding for input fields */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('user_dashboard',user_id=userr.id) }}">ChillTV</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('user_profile',user_id=userr.id) }}">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('index')}}">Logout</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('display_venues',user_id=userr.id) }}">Cinemas</a>
+            </li>
+            <li>
+              <form action="{{ url_for('search',user_id=userr.id) }}" method="POST" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" name="location" placeholder="Enter your location preference">
+                <input class="form-control mr-sm-2" type="text" name="tags" placeholder="Enter movie tags">
+                <input class="form-control mr-sm-2" type="text" name="rating" placeholder="Enter movie rating">
+                <input class="form-control mr-sm-2" type="text" name="name" placeholder="Enter movie name">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <h1 class="header">Venues List</h1>
+      {% for venue in venues %}
+      <div class="venue-container">
+        <h2>{{ venue.name }}</h2>
+        <p>{{ venue.location }}</p>
+        <form action="{{ url_for('display_venues', user_id=user_id) }}" method="POST" class="d-inline">
+          <input type="hidden" name="venue_id" value="{{ venue.id }}">
+          <button type="submit" class="btn btn-success">Book</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
